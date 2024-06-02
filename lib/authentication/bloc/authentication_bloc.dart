@@ -15,10 +15,22 @@ class AuthenticationBloc
     required UserRepository userRepository,
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
-        super(const AuthenticationState.unknown());
+        super(const AuthenticationState.unknown()) {
+    on<_AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
+    on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
+    _authenticationStatusSubscription = _authenticationRepository.status.listen(
+      (status) => add(_AuthenticationStatusChanged(status)),
+    );
+  }
 
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
   late StreamSubscription<AuthenticationStatus>
       _authenticationStatusSubscription;
+
+  FutureOr<void> _onAuthenticationStatusChanged(
+      _AuthenticationStatusChanged event, Emitter<AuthenticationState> emit) {}
+
+  FutureOr<void> _onAuthenticationLogoutRequested(
+      AuthenticationLogoutRequested event, Emitter<AuthenticationState> emit) {}
 }
