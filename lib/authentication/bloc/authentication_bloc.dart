@@ -28,9 +28,40 @@ class AuthenticationBloc
   late StreamSubscription<AuthenticationStatus>
       _authenticationStatusSubscription;
 
+  @override
+  Future<void> close() {
+    _authenticationStatusSubscription.cancel();
+    return super.close();
+  }
+
   FutureOr<void> _onAuthenticationStatusChanged(
-      _AuthenticationStatusChanged event, Emitter<AuthenticationState> emit) {}
+      _AuthenticationStatusChanged event, Emitter<AuthenticationState> emit) async {
+        switch (event.status) {
+          case AuthenticationStatus.unauthenticated:
+            return emit(const AuthenticationState.unauthenticated());
+          case AuthenticationStatus.authenticated:
+            final user = await _tryGetUser();
+            return emit(
+              user != null
+                ? AuthenticationState.authenticated(user)
+                : const AuthenticationState.unauthenticated(),
+            );
+          case AuthenticationStatus.unknown:
+            return emit(const AuthenticationState.unknown());
+        }
+  }
 
   FutureOr<void> _onAuthenticationLogoutRequested(
-      AuthenticationLogoutRequested event, Emitter<AuthenticationState> emit) {}
+      AuthenticationLogoutRequested event, Emitter<AuthenticationState> emit) {
+        _authenticationRepository.logOut();
+      }
+      
+  Future<User?> _tryGetUser() async {
+    try {
+      final user = await _userRepository.getUser();
+      return user;
+    } catch (_) {
+      return null;
+    }
+  }
 }
