@@ -13,9 +13,8 @@ class LoginForm extends StatelessWidget {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
-            );
+            ..showSnackBar(const SnackBar(content: Text('Authentication Failure')),
+          );
         }
       },
       child: Align(
@@ -43,13 +42,11 @@ class _UsernameInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('loginForm_usernameInput_textField'),
-          onChanged: (username) =>
-            context.read<LoginBloc>().add(LoginUsernameChanged(username)),
-            decoration: InputDecoration(
-              labelText: 'username',
-              errorText:
-                state.username.displayError != null ? 'invalid username' : null,
-            ),
+          onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
+          decoration: InputDecoration(
+            labelText: 'username',
+            errorText: state.username.displayError != null ? 'invalid username' : null,
+          ),
         );
       },
     );
@@ -64,13 +61,11 @@ class _PasswordInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('loginForm_passwordInput_textField'),
-          onChanged: (password) =>
-            context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+          onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',
-            errorText:
-              state.password.displayError != null ? 'invalid password' : null,
+            errorText: state.password.displayError != null ? 'invalid password' : null,
           ),
         );
       },
@@ -87,11 +82,7 @@ class _LoginButton extends StatelessWidget {
           ? const CircularProgressIndicator()
           : ElevatedButton(
             key: const Key('loginForm_continue_raisedButton'),
-            onPressed: state.isValid
-              ? () {
-                context.read<LoginBloc>().add(const LoginSubmitted());
-                }
-              : null,
+            onPressed: state.isValid ? () { context.read<LoginBloc>().add(const LoginSubmitted());}: null,
             child: const Text('Login'),
           );
       },
