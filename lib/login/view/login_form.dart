@@ -81,9 +81,9 @@ class _LoginButton extends StatelessWidget {
         return state.status.isInProgress
           ? const CircularProgressIndicator()
           : ElevatedButton(
-            key: const Key('loginForm_continue_raisedButton'),
-            onPressed: state.isValid ? () { context.read<LoginBloc>().add(const LoginSubmitted());}: null,
-            child: const Text('Login'),
+              key: const Key('loginForm_continue_raisedButton'),
+              onPressed: state.isValid ? () { context.read<LoginBloc>().add(const LoginSubmitted());}: null,
+              child: const Text('Login'),
           );
       },
     );
